@@ -1,0 +1,136 @@
+aid: cherre
+url: https://raw.githubusercontent.com/api-evangelist/cherre/refs/heads/main/apis.yml
+name: Cherre
+kind: company
+description: Cherre is a real-estate data-integration and property-intelligence platform
+  that connects, cleans, and resolves public, third-party, and proprietary real-estate
+  datasets - property characteristics, tax and assessments, recorder and deeds, owners,
+  parcel boundaries, and connected portfolio data - and serves them back through a single
+  GraphQL API built on Hasura.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- Real Estate
+- Property Intelligence
+- Data Integration
+- Knowledge Graph
+- GraphQL
+created: '2026-06-21'
+modified: '2026-06-21'
+specificationVersion: '0.19'
+apis:
+- aid: cherre:property
+  name: Cherre Property API
+  tags:
+  - Property
+  - Real Estate
+  - GraphQL
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://cherre.com/products/platform/
+  baseURL: https://api.cherre.com/graphql
+  properties:
+  - url: https://cherre.com/products/platform/
+    type: Documentation
+  - url: graphql/cherre-graphql.md
+    type: GraphQL
+  - url: openapi/cherre-openapi.yml
+    type: OpenAPI
+  description: Resolved property records - characteristics, valuations, building and
+    unit attributes - queried over Cherre's single GraphQL API with joins, filters,
+    aggregations, and PostGIS geospatial operations across connected datasets.
+- aid: cherre:tax-assessor
+  name: Cherre Tax Assessor API
+  tags:
+  - Tax Assessor
+  - Assessments
+  - GraphQL
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://cherre.com/products/platform/
+  baseURL: https://api.cherre.com/graphql
+  properties:
+  - url: https://cherre.com/products/platform/
+    type: Documentation
+  - url: graphql/cherre-graphql.md
+    type: GraphQL
+  - url: openapi/cherre-openapi.yml
+    type: OpenAPI
+  description: County tax assessor and assessment data - assessed and market values,
+    land and improvement valuations, exemptions, and assessment history - resolved
+    to Cherre's standard property model and queryable via GraphQL.
+- aid: cherre:recorder
+  name: Cherre Recorder API
+  tags:
+  - Recorder
+  - Deeds
+  - Mortgages
+  - GraphQL
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://cherre.com/products/platform/
+  baseURL: https://api.cherre.com/graphql
+  properties:
+  - url: https://cherre.com/products/platform/
+    type: Documentation
+  - url: graphql/cherre-graphql.md
+    type: GraphQL
+  - url: openapi/cherre-openapi.yml
+    type: OpenAPI
+  description: Recorder, deeds, transactions, mortgages, and liens - sales and transfer
+    history, lenders, loan amounts, and document detail - connected to parcels and
+    owners through the Cherre knowledge graph.
+- aid: cherre:owner-parcel
+  name: Cherre Owner & Parcel API
+  tags:
+  - Owner
+  - Parcel
+  - Boundaries
+  - GraphQL
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://cherre.com/products/platform/
+  baseURL: https://api.cherre.com/graphql
+  properties:
+  - url: https://cherre.com/products/platform/
+    type: Documentation
+  - url: graphql/cherre-graphql.md
+    type: GraphQL
+  - url: openapi/cherre-openapi.yml
+    type: OpenAPI
+  description: Resolved owners and entity relationships plus parcel and building boundary
+    geometries, with PostGIS spatial queries (contains, intersects, point lookups)
+    for custom market areas over the GraphQL API.
+- aid: cherre:connections
+  name: Cherre Connections API
+  tags:
+  - Connections
+  - Marketplace
+  - Proprietary Data
+  - GraphQL
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://cherre.com/marketplace-connections/
+  baseURL: https://api.cherre.com/graphql
+  properties:
+  - url: https://cherre.com/marketplace-connections/
+    type: Documentation
+  - url: graphql/cherre-graphql.md
+    type: GraphQL
+  - url: openapi/cherre-openapi.yml
+    type: OpenAPI
+  description: Connected third-party marketplace datasets and a customer's own proprietary
+    and portfolio data, joined to the resolved knowledge graph and exposed through the
+    same unified GraphQL surface for cross-dataset queries.
+common:
+- type: GitHubOrganization
+  url: https://github.com/cherreco
+- type: LinkedIn
+  url: https://www.linkedin.com/company/cherre
+- type: Website
+  url: https://www.cherre.com
+- type: Documentation
+  url: https://cherre.com/products/platform/
+- type: Plans
+  url: plans/cherre-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/cherre-rate-limits.yml
+- type: FinOps
+  url: finops/cherre-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

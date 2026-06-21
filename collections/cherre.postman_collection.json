@@ -1,0 +1,224 @@
+{
+  "info": {
+    "name": "Cherre GraphQL API",
+    "description": "Cherre serves connected real-estate data (property, tax assessor, recorder/deeds, mortgages/liens, owners, parcel boundaries, demographics, connections) through a single GraphQL API built on Hasura. GraphQL operations are sent as HTTP POST to https://api.cherre.com/graphql, authorized with an OAuth 2.0 client-credentials bearer token. Endpoint and schema are representative; access is provisioned per customer via Cherre's Developer Portal.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.cherre.com"
+    },
+    {
+      "key": "clientId",
+      "value": ""
+    },
+    {
+      "key": "clientSecret",
+      "value": ""
+    },
+    {
+      "key": "bearerToken",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Obtain an OAuth 2.0 client-credentials access token.",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/oauth/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "oauth",
+                "token"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"grant_type\": \"client_credentials\",\n  \"client_id\": \"{{clientId}}\",\n  \"client_secret\": \"{{clientSecret}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "description": "Exchange client credentials for a bearer access token used to authorize GraphQL requests."
+          }
+        }
+      ]
+    },
+    {
+      "name": "GraphQL",
+      "item": [
+        {
+          "name": "Tax Assessor - records by ZIP code",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query($zip: String!) {\n  tax_assessor(where: { situs_zip_code: { _eq: $zip } }, limit: 25) {\n    tax_assessor_id\n    assessed_value_total\n    market_value_total\n    year_built\n  }\n}",
+                "variables": "{\n  \"zip\": \"10001\"\n}"
+              }
+            },
+            "description": "Query resolved tax assessor / assessment records filtered by situs ZIP code."
+          }
+        },
+        {
+          "name": "Recorder - deeds with mortgages",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  recorder(where: { fips_code: { _eq: \"06037\" } }, order_by: { document_recorded_date: desc }, limit: 50) {\n    recorder_id\n    document_type\n    document_recorded_date\n    document_amount\n    grantor_name\n    grantee_name\n    mortgages {\n      lender_name\n      mortgage_amount\n    }\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Query recorder deeds/transfers with connected mortgage/lien records for a county FIPS."
+          }
+        },
+        {
+          "name": "Parcel Boundary - spatial contains (PostGIS)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query($area: geometry!) {\n  parcel_boundary(where: { geom: { _st_contains: $area } }, limit: 500) {\n    cherre_parcel_id\n    tax_assessor {\n      assessed_value_total\n      land_use_code\n    }\n  }\n}",
+                "variables": "{\n  \"area\": \"SRID=4326;POLYGON((...))\"\n}"
+              }
+            },
+            "description": "Retrieve parcels whose geometry is contained within a custom-drawn boundary using a PostGIS spatial operator."
+          }
+        },
+        {
+          "name": "Tax Assessor - aggregate by ZIP",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  tax_assessor_aggregate(where: { situs_zip_code: { _eq: \"33139\" } }) {\n    aggregate {\n      count\n      sum { assessed_value_total }\n      avg { assessed_value_total }\n    }\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Aggregate (count, sum, avg) assessed value across a ZIP code."
+          }
+        },
+        {
+          "name": "Owner - resolve entity and holdings",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/graphql",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "graphql"
+              ]
+            },
+            "body": {
+              "mode": "graphql",
+              "graphql": {
+                "query": "query {\n  owner(where: { owner_name: { _ilike: \"%acme holdings%\" } }, limit: 10) {\n    cherre_owner_id\n    owner_name\n    mailing_address\n    properties {\n      cherre_property_id\n      tax_assessor { assessed_value_total }\n    }\n  }\n}",
+                "variables": "{}"
+              }
+            },
+            "description": "Resolve an owner entity and its connected property holdings."
+          }
+        }
+      ]
+    }
+  ]
+}

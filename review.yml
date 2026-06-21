@@ -1,0 +1,92 @@
+aid: cherre
+name: Cherre
+review:
+  question: Does Cherre expose a documented public GraphQL API, and what is its transport?
+  answer: true
+  date: '2026-06-21'
+  reviewer: API Evangelist
+  graphqlArtifactCreated: true
+  graphqlScopeNote: |
+    Cherre serves its connected real-estate data through a single GraphQL API
+    built on Hasura. The GraphQL transport is HTTP POST of a query document to a
+    /graphql endpoint, authorized with an OAuth 2.0 client-credentials bearer
+    token. A representative SDL and GraphQL guide were authored at
+    graphql/cherre-schema.graphql and graphql/cherre-graphql.md, and the HTTP
+    transport (POST /graphql + POST /oauth/token) was modeled in
+    openapi/cherre-openapi.yml. No public, versioned SDL is published; the full
+    schema is provisioned to authenticated customers via Cherre's Developer
+    Portal and varies by licensed datasets.
+findings:
+  summary: |
+    Cherre is a real-estate data-integration and property-intelligence platform.
+    It ingests public records, third-party vendor feeds, and customer-proprietary
+    data, standardizes and entity-resolves them against a real-estate knowledge
+    graph, and exposes the connected result through a SINGLE GraphQL API built on
+    Hasura. GraphQL is the primary, documented programmatic surface (the company
+    explicitly chose GraphQL over REST because REST could not scale to the join /
+    filter / aggregate complexity their clients require). Queries support
+    server-side joins, filters, aggregations (sum/avg/count/distinct), and PostGIS
+    geospatial operators for custom market boundaries. Data can also be egressed
+    to external warehouses (Snowflake, BigQuery, AWS, Azure). Pricing is enterprise
+    and sales-led; no public price list is published.
+  transports:
+    - protocol: GraphQL
+      scheme: https
+      baseURL: https://api.cherre.com/graphql
+      method: POST
+      documented: true
+      note: Single GraphQL API built on Hasura; HTTP POST of a query document. Endpoint shown is representative; access is provisioned per customer.
+    - protocol: REST
+      scheme: https
+      documented: true
+      note: OAuth 2.0 token endpoint (client-credentials) issues the bearer token used to authorize GraphQL requests.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No public GraphQL subscription / WebSocket transport is documented; the surface is request/response GraphQL over HTTP plus warehouse egress.
+  auth:
+    type: OAuth2
+    grant: client_credentials
+    header: 'Authorization: Bearer <access_token>'
+    documented: true
+  datasetsModeled:
+    - Property (resolved characteristics, valuations)
+    - Tax Assessor (assessments, values, exemptions)
+    - Recorder (deeds, transfers, transactions)
+    - Mortgages / Liens
+    - Owner (resolved entities and relationships)
+    - Parcel / Building Boundaries (PostGIS geometry)
+    - Demographics
+    - Connections (third-party marketplace + customer-proprietary)
+  reconciliation:
+    pricingReconciled: false
+    rateLimitsReconciled: false
+    note: Pricing and rate limits are contract-driven and not publicly published; modeled artifacts are flagged reconciled false.
+sources:
+  - url: https://cherre.com/products/platform/
+    type: Documentation
+    note: Describes the Data Fabric datasets and the Property Graph / GraphQL API (search, geospatial PostGIS, large-scale retrieval, aggregates, warehouse egress).
+  - url: https://hasura.io/case-studies/cherre/
+    type: CaseStudy
+    note: Confirms the single GraphQL API is built on Hasura, with schema stitching, spatial queries (_st_contains), object aliasing, and custom functions; chosen over REST for complexity/scale.
+  - url: https://cherre.com/marketplace-connections/
+    type: Documentation
+    note: Connections marketplace - third-party and proprietary datasets joined to the knowledge graph and exposed through the same GraphQL surface.
+  - url: https://github.com/cherreco
+    type: SourceCode
+    note: Cherre's GitHub organization (Cherre Production); primarily infrastructure/tooling repos, no public API client or SDL.
+actions:
+  graphqlSchemaPath: graphql/cherre-schema.graphql
+  graphqlGuidePath: graphql/cherre-graphql.md
+  openapiPath: openapi/cherre-openapi.yml
+  apisYmlUpdated: true
+  reason: |
+    Cherre's documented programmatic surface is GraphQL. A representative SDL,
+    a GraphQL usage guide, and an OpenAPI model of the HTTP transport
+    (POST /graphql + OAuth token) were authored, and apis.yml lists five GraphQL
+    sub-APIs (Property, Tax Assessor, Recorder, Owner & Parcel, Connections).
+    Pricing and rate-limit artifacts are flagged reconciled false because Cherre
+    licensing is sales-led and not publicly priced.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,70 @@
+specification: API Commons Rate Limits
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/RateLimits
+provider: Cherre
+providerId: cherre
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Real Estate
+- Property Intelligence
+- Data Integration
+- GraphQL
+- Rate Limiting
+- Quotas
+- Throttling
+description: >-
+  Cherre's GraphQL API is access-controlled per licensed customer. Usage is
+  governed by the customer's contract - licensed datasets, query volume, row /
+  record egress, and GraphQL query complexity (depth, joins, aggregations, and
+  spatial operations). Specific numeric request, row, and complexity limits are
+  not publicly documented and are set per engagement; they are not reconciled in
+  this artifact.
+notes: >-
+  Confirm concrete limits (requests per interval, max rows per query, query
+  complexity/depth caps, concurrent queries, and egress volume) in the Cherre
+  contract and Developer Portal during reconciliation. Bulk extraction is
+  typically handled via warehouse egress (BigQuery, Snowflake) rather than large
+  paginated GraphQL pulls.
+sources:
+- https://cherre.com/products/platform/
+- https://hasura.io/case-studies/cherre/
+responseCodes:
+  throttled: 429
+limits:
+- name: Requests Per Interval
+  scope: account
+  metric: requests
+  limit: see provider contract
+  notes: Per-customer request limits set by the licensing agreement.
+- name: Rows Per Query
+  scope: query
+  metric: rows
+  limit: see provider contract
+  notes: GraphQL responses are paginated; large extracts use warehouse egress.
+- name: Query Complexity
+  scope: query
+  metric: complexity
+  limit: see provider contract
+  notes: Depth, joins, aggregations, and PostGIS spatial operations contribute to cost.
+- name: Concurrent Queries
+  scope: account
+  metric: connections
+  limit: see provider contract
+  notes: Concurrency caps may apply per customer/token.
+- name: Data Egress
+  scope: account
+  metric: records
+  limit: see provider contract
+  notes: Egress to Snowflake, BigQuery, AWS, or Azure is governed by licensed volume.
+policies:
+- name: Per-Contract Limits
+  description: Limits derive from the customer's dataset license, geography, and volume tier.
+- name: Backoff Strategy
+  description: Clients should implement exponential backoff with jitter and honor 429 Retry-After responses.
+- name: Warehouse Egress for Bulk
+  description: Use Cherre's warehouse egress (BigQuery / Snowflake) for large-scale extracts rather than deep paginated GraphQL queries.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,104 @@
+specification: FinOps Framework
+specificationVersion: '1.0'
+schema: https://www.finops.org/framework/
+provider: Cherre
+providerId: cherre
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Real Estate
+- Property Intelligence
+- Data Integration
+- GraphQL
+- FinOps
+- Cost Management
+- FOCUS
+description: >-
+  FinOps view of Cherre spend. Cherre is an enterprise, sales-led data-licensing
+  platform: customers pay for platform access plus the specific connected
+  datasets they license (property, tax assessor, recorder/deeds, mortgages/liens,
+  owners, parcel boundaries, demographics, and connected marketplace data) and
+  consume them through a single GraphQL API, optionally egressing to external
+  warehouses. Cost is contract-driven rather than transparently metered, so the
+  meters below are modeled, not reconciled.
+notes: >-
+  Cherre does not publish public per-unit rates; spend is governed by the
+  licensing contract. Treat meters as a tracking model and reconcile against the
+  Cherre agreement and any usage reporting available in the Developer Portal.
+sources:
+- https://cherre.com/products/platform/
+- https://cherre.com/marketplace-connections/
+- https://focus.finops.org/focus-specification/v1-3/
+alignedWith:
+  framework: FinOps Foundation Framework
+  frameworkUrl: https://www.finops.org/framework/
+  dataSpec: FOCUS
+  dataSpecVersion: '1.3'
+  dataSpecUrl: https://focus.finops.org/focus-specification/v1-3/
+publisherName: Cherre
+serviceCategory: Analytics and Data
+billingModel:
+  pricingCategory: Commitment-Based
+  billingFrequency: Annual
+  billingCurrency: USD
+  chargeCategories:
+  - Purchase
+  - Usage
+  - Adjustment
+focusColumns:
+  ServiceName: Cherre Platform
+  ServiceCategory: Analytics and Data
+  ProviderName: Cherre
+  PublisherName: Cherre
+  InvoiceIssuerName: Cherre
+  BillingCurrency: USD
+  ChargeCategory: Purchase
+  PricingCategory: Commitment-Based
+meters:
+- name: platform_license
+  description: Annual platform / GraphQL API access license.
+  unit: contract
+  aggregation: max
+  dimensions:
+  - account
+  - product
+- name: dataset_licenses
+  description: Connected datasets licensed (property, tax assessor, recorder, owner, parcel, connections).
+  unit: datasets
+  aggregation: sum
+  dimensions:
+  - account
+  - dataset
+- name: api_queries
+  description: GraphQL queries executed against the connected data.
+  unit: queries
+  aggregation: sum
+  dimensions:
+  - account
+  - dataset
+- name: records_egressed
+  description: Records exported to external warehouses (Snowflake, BigQuery, AWS, Azure).
+  unit: records
+  aggregation: sum
+  dimensions:
+  - account
+  - destination
+- name: seats
+  description: Licensed user seats with platform / API access.
+  unit: seats
+  aggregation: max
+  dimensions:
+  - account
+principles:
+- name: Visibility
+  description: Track which datasets are licensed and which teams query them; map to the contract line items.
+- name: Allocation
+  description: Tag API tokens and egress destinations per workload/team and map to internal cost centers.
+- name: Optimization
+  description: License only the datasets and geographies in active use; prefer warehouse egress for bulk over deep GraphQL pulls; consolidate duplicate vendor feeds via Connections.
+- name: Accountability
+  description: Assign dataset owners; review query and egress volume against the contract annually before renewal.
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

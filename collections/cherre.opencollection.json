@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cherre GraphQL API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Obtain an OAuth 2.0 client-credentials access token.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cherre.com/oauth/token",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"grant_type\": \"client_credentials\",\n  \"client_id\": \"{{clientId}}\",\n  \"client_secret\": \"{{clientSecret}}\"\n}"
+            }
+          },
+          "docs": "Exchange client credentials for a bearer access token used to authorize GraphQL requests."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "GraphQL",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Tax Assessor - records by ZIP code",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cherre.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"query\": \"query($zip: String!) { tax_assessor(where: { situs_zip_code: { _eq: $zip } }, limit: 25) { tax_assessor_id assessed_value_total market_value_total year_built } }\",\n  \"variables\": { \"zip\": \"10001\" }\n}"
+            }
+          },
+          "docs": "Query resolved tax assessor / assessment records filtered by situs ZIP code."
+        },
+        {
+          "info": {
+            "name": "Recorder - deeds with mortgages",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cherre.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"query\": \"query { recorder(where: { fips_code: { _eq: \\\"06037\\\" } }, order_by: { document_recorded_date: desc }, limit: 50) { recorder_id document_type document_recorded_date document_amount grantor_name grantee_name mortgages { lender_name mortgage_amount } } }\"\n}"
+            }
+          },
+          "docs": "Query recorder deeds/transfers with connected mortgage/lien records for a county FIPS."
+        },
+        {
+          "info": {
+            "name": "Parcel Boundary - spatial contains (PostGIS)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cherre.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"query\": \"query($area: geometry!) { parcel_boundary(where: { geom: { _st_contains: $area } }, limit: 500) { cherre_parcel_id tax_assessor { assessed_value_total land_use_code } } }\",\n  \"variables\": { \"area\": \"SRID=4326;POLYGON((...))\" }\n}"
+            }
+          },
+          "docs": "Retrieve parcels whose geometry is contained within a custom-drawn boundary using a PostGIS spatial operator."
+        },
+        {
+          "info": {
+            "name": "Tax Assessor - aggregate by ZIP",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cherre.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"query\": \"query { tax_assessor_aggregate(where: { situs_zip_code: { _eq: \\\"33139\\\" } }) { aggregate { count sum { assessed_value_total } avg { assessed_value_total } } } }\"\n}"
+            }
+          },
+          "docs": "Aggregate (count, sum, avg) assessed value across a ZIP code."
+        },
+        {
+          "info": {
+            "name": "Owner - resolve entity and holdings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cherre.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{\n  \"query\": \"query { owner(where: { owner_name: { _ilike: \\\"%acme holdings%\\\" } }, limit: 10) { cherre_owner_id owner_name mailing_address properties { cherre_property_id tax_assessor { assessed_value_total } } } }\"\n}"
+            }
+          },
+          "docs": "Resolve an owner entity and its connected property holdings."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

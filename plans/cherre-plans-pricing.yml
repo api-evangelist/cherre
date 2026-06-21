@@ -1,0 +1,103 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Cherre
+providerId: cherre
+created: '2026-06-21'
+modified: '2026-06-21'
+reconciled: false
+tags:
+- Real Estate
+- Property Intelligence
+- Data Integration
+- Knowledge Graph
+- GraphQL
+- Plans
+description: >-
+  Cherre is sold through a sales-led, enterprise data-licensing model. Customers
+  license access to the platform and to specific connected datasets (property,
+  tax assessor, recorder/deeds, mortgages/liens, owners, parcel boundaries,
+  demographics) and query them through the GraphQL API, with options to egress
+  to external warehouses (Snowflake, BigQuery, AWS, Azure). Pricing is quoted per
+  engagement based on datasets licensed, geographic coverage, seats, and volume.
+  No public self-serve price list is published; values below are not reconciled.
+notes: >-
+  Pricing is not publicly listed and is negotiated with Cherre sales. Plan and
+  dataset packaging vary by product (Core platform, Connections, CoreConnect).
+  Verify all terms directly with Cherre during reconciliation.
+sources:
+- https://cherre.com/products/platform/
+- https://cherre.com/marketplace-connections/
+- https://www.cherre.com
+plans:
+- id: cherre-platform
+  name: Cherre Platform
+  type: enterprise
+  description: >-
+    Licensed access to the Cherre data-management platform and the single
+    GraphQL API over connected, resolved real-estate datasets. Scoped by the
+    datasets licensed, geography, and seats.
+  entries:
+  - label: Platform License
+    name: platform_license
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: GraphQL API
+  - name: Property
+  - name: Tax Assessor
+  - name: Recorder & Deeds
+  - name: Mortgages & Liens
+  - name: Owner & Parcel
+  - name: Demographics
+  - name: Data Egress
+- id: cherre-connections
+  name: Connections
+  type: enterprise
+  description: >-
+    Licensing of connected third-party marketplace datasets joined to the
+    Cherre knowledge graph and exposed through the same GraphQL surface.
+  entries:
+  - label: Dataset License
+    name: connections_dataset
+    type: usage
+    metric: datasets
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Marketplace Datasets
+  - name: Proprietary Data Integration
+- id: cherre-coreconnect
+  name: CoreConnect
+  type: enterprise
+  description: >-
+    Productized access tier for integrating Cherre property, ownership, and
+    tax assessor data into a customer's systems. Quoted by sales.
+  entries:
+  - label: CoreConnect Subscription
+    name: coreconnect
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Property
+  - name: Ownership
+  - name: Tax Assessor
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

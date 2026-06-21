@@ -1,0 +1,439 @@
+"""
+Cherre GraphQL Schema (representative)
+
+Cherre serves connected real-estate data through a single GraphQL API built on Hasura.
+This SDL is a REPRESENTATIVE model of the documented capabilities - resolved property,
+tax assessor, recorder/deeds, mortgage/lien, owner, parcel-boundary, demographic, and
+connected datasets, with Hasura-style filtering/aggregation and PostGIS spatial operators.
+The production schema is exposed to authenticated customers via Cherre's Developer Portal
+and varies by licensed datasets and data-model version; exact names may differ.
+
+Source: https://cherre.com/products/platform/  |  https://hasura.io/case-studies/cherre/
+Endpoint: https://api.cherre.com/graphql (POST, OAuth2 client-credentials -> Bearer)
+"""
+
+# ---------------------------------------------------------------------------
+# Scalars
+# ---------------------------------------------------------------------------
+
+scalar bigint
+scalar numeric
+scalar date
+scalar timestamptz
+scalar geometry
+scalar jsonb
+
+# ---------------------------------------------------------------------------
+# Enums
+# ---------------------------------------------------------------------------
+
+enum order_by {
+  asc
+  desc
+  asc_nulls_first
+  asc_nulls_last
+  desc_nulls_first
+  desc_nulls_last
+}
+
+# ---------------------------------------------------------------------------
+# Comparison / boolean expression inputs (Hasura-style)
+# ---------------------------------------------------------------------------
+
+input String_comparison_exp {
+  _eq: String
+  _neq: String
+  _in: [String!]
+  _nin: [String!]
+  _like: String
+  _ilike: String
+  _is_null: Boolean
+}
+
+input numeric_comparison_exp {
+  _eq: numeric
+  _neq: numeric
+  _gt: numeric
+  _gte: numeric
+  _lt: numeric
+  _lte: numeric
+  _in: [numeric!]
+  _is_null: Boolean
+}
+
+input bigint_comparison_exp {
+  _eq: bigint
+  _neq: bigint
+  _in: [bigint!]
+  _is_null: Boolean
+}
+
+input date_comparison_exp {
+  _eq: date
+  _gt: date
+  _gte: date
+  _lt: date
+  _lte: date
+  _is_null: Boolean
+}
+
+"""PostGIS spatial comparison operators exposed by Hasura on geometry columns."""
+input geometry_comparison_exp {
+  _eq: geometry
+  _st_contains: geometry
+  _st_within: geometry
+  _st_intersects: geometry
+  _st_d_within: st_d_within_input
+  _is_null: Boolean
+}
+
+input st_d_within_input {
+  distance: Float!
+  from: geometry!
+}
+
+# ---------------------------------------------------------------------------
+# Tax Assessor
+# ---------------------------------------------------------------------------
+
+type tax_assessor {
+  tax_assessor_id: bigint!
+  cherre_parcel_id: String
+  fips_code: String
+  apn: String
+  situs_address: String
+  situs_city: String
+  situs_state: String
+  situs_zip_code: String
+  land_use_code: String
+  property_use_standardized: String
+  year_built: Int
+  gross_sq_ft: numeric
+  lot_size_sq_ft: numeric
+  assessed_value_total: numeric
+  assessed_value_land: numeric
+  assessed_value_improvements: numeric
+  market_value_total: numeric
+  tax_amount: numeric
+  tax_year: Int
+  geom: geometry
+  recorder(limit: Int, offset: Int, where: recorder_bool_exp, order_by: [recorder_order_by!]): [recorder!]
+  owners(limit: Int, offset: Int): [owner!]
+}
+
+input tax_assessor_bool_exp {
+  _and: [tax_assessor_bool_exp!]
+  _or: [tax_assessor_bool_exp!]
+  tax_assessor_id: bigint_comparison_exp
+  fips_code: String_comparison_exp
+  apn: String_comparison_exp
+  situs_zip_code: String_comparison_exp
+  land_use_code: String_comparison_exp
+  assessed_value_total: numeric_comparison_exp
+  market_value_total: numeric_comparison_exp
+  geom: geometry_comparison_exp
+}
+
+input tax_assessor_order_by {
+  tax_assessor_id: order_by
+  assessed_value_total: order_by
+  market_value_total: order_by
+  year_built: order_by
+}
+
+type tax_assessor_aggregate {
+  aggregate: tax_assessor_aggregate_fields
+  nodes: [tax_assessor!]!
+}
+
+type tax_assessor_aggregate_fields {
+  count: Int!
+  sum: tax_assessor_sum_fields
+  avg: tax_assessor_avg_fields
+  min: tax_assessor_min_fields
+  max: tax_assessor_max_fields
+}
+
+type tax_assessor_sum_fields {
+  assessed_value_total: numeric
+  market_value_total: numeric
+  gross_sq_ft: numeric
+}
+
+type tax_assessor_avg_fields {
+  assessed_value_total: Float
+  market_value_total: Float
+}
+
+type tax_assessor_min_fields {
+  assessed_value_total: numeric
+  year_built: Int
+}
+
+type tax_assessor_max_fields {
+  assessed_value_total: numeric
+  year_built: Int
+}
+
+# ---------------------------------------------------------------------------
+# Recorder (deeds / transactions)
+# ---------------------------------------------------------------------------
+
+type recorder {
+  recorder_id: bigint!
+  cherre_parcel_id: String
+  fips_code: String
+  document_type: String
+  document_recorded_date: date
+  document_amount: numeric
+  grantor_name: String
+  grantee_name: String
+  sale_price: numeric
+  transfer_type: String
+  geom: geometry
+  mortgages(limit: Int, offset: Int): [recorder_mortgage!]
+}
+
+input recorder_bool_exp {
+  _and: [recorder_bool_exp!]
+  _or: [recorder_bool_exp!]
+  recorder_id: bigint_comparison_exp
+  fips_code: String_comparison_exp
+  document_type: String_comparison_exp
+  document_recorded_date: date_comparison_exp
+  document_amount: numeric_comparison_exp
+}
+
+input recorder_order_by {
+  recorder_id: order_by
+  document_recorded_date: order_by
+  document_amount: order_by
+}
+
+type recorder_aggregate {
+  aggregate: recorder_aggregate_fields
+  nodes: [recorder!]!
+}
+
+type recorder_aggregate_fields {
+  count: Int!
+  sum: recorder_sum_fields
+  avg: recorder_avg_fields
+}
+
+type recorder_sum_fields {
+  document_amount: numeric
+  sale_price: numeric
+}
+
+type recorder_avg_fields {
+  document_amount: Float
+  sale_price: Float
+}
+
+# ---------------------------------------------------------------------------
+# Recorder Mortgage / Lien
+# ---------------------------------------------------------------------------
+
+type recorder_mortgage {
+  recorder_mortgage_id: bigint!
+  recorder_id: bigint
+  cherre_parcel_id: String
+  lender_name: String
+  mortgage_amount: numeric
+  mortgage_interest_rate: numeric
+  mortgage_term_months: Int
+  mortgage_date: date
+  mortgage_due_date: date
+  loan_type: String
+}
+
+# ---------------------------------------------------------------------------
+# Property (resolved entity)
+# ---------------------------------------------------------------------------
+
+type property {
+  cherre_property_id: String!
+  cherre_parcel_id: String
+  address: String
+  city: String
+  state: String
+  zip_code: String
+  property_type: String
+  geom: geometry
+  tax_assessor: tax_assessor
+  recorder(limit: Int, offset: Int): [recorder!]
+  owners(limit: Int, offset: Int): [owner!]
+}
+
+input property_bool_exp {
+  _and: [property_bool_exp!]
+  _or: [property_bool_exp!]
+  cherre_property_id: String_comparison_exp
+  state: String_comparison_exp
+  zip_code: String_comparison_exp
+  property_type: String_comparison_exp
+  geom: geometry_comparison_exp
+}
+
+input property_order_by {
+  cherre_property_id: order_by
+  zip_code: order_by
+}
+
+# ---------------------------------------------------------------------------
+# Owner (resolved entity)
+# ---------------------------------------------------------------------------
+
+type owner {
+  cherre_owner_id: String!
+  owner_name: String
+  owner_type: String
+  mailing_address: String
+  mailing_city: String
+  mailing_state: String
+  mailing_zip_code: String
+  properties(limit: Int, offset: Int): [property!]
+}
+
+input owner_bool_exp {
+  _and: [owner_bool_exp!]
+  _or: [owner_bool_exp!]
+  cherre_owner_id: String_comparison_exp
+  owner_name: String_comparison_exp
+  owner_type: String_comparison_exp
+  mailing_state: String_comparison_exp
+}
+
+input owner_order_by {
+  cherre_owner_id: order_by
+  owner_name: order_by
+}
+
+# ---------------------------------------------------------------------------
+# Parcel Boundary (geometry)
+# ---------------------------------------------------------------------------
+
+type parcel_boundary {
+  cherre_parcel_id: String!
+  fips_code: String
+  apn: String
+  geom: geometry!
+  area_sq_ft: numeric
+  tax_assessor: tax_assessor
+}
+
+input parcel_boundary_bool_exp {
+  _and: [parcel_boundary_bool_exp!]
+  _or: [parcel_boundary_bool_exp!]
+  cherre_parcel_id: String_comparison_exp
+  fips_code: String_comparison_exp
+  geom: geometry_comparison_exp
+}
+
+input parcel_boundary_order_by {
+  cherre_parcel_id: order_by
+  area_sq_ft: order_by
+}
+
+# ---------------------------------------------------------------------------
+# Demographics
+# ---------------------------------------------------------------------------
+
+type usa_demographics {
+  geo_id: String!
+  geography_level: String
+  total_population: Int
+  median_household_income: numeric
+  median_home_value: numeric
+  geom: geometry
+}
+
+# ---------------------------------------------------------------------------
+# Connections (third-party marketplace / customer-proprietary datasets)
+# ---------------------------------------------------------------------------
+
+type connection_dataset {
+  connection_id: String!
+  dataset_name: String!
+  provider: String
+  cherre_parcel_id: String
+  attributes: jsonb
+  geom: geometry
+}
+
+input connection_dataset_bool_exp {
+  _and: [connection_dataset_bool_exp!]
+  _or: [connection_dataset_bool_exp!]
+  connection_id: String_comparison_exp
+  dataset_name: String_comparison_exp
+  provider: String_comparison_exp
+  geom: geometry_comparison_exp
+}
+
+# ---------------------------------------------------------------------------
+# Query root
+# ---------------------------------------------------------------------------
+
+type query_root {
+  "Resolved tax assessor / assessment records."
+  tax_assessor(
+    where: tax_assessor_bool_exp
+    order_by: [tax_assessor_order_by!]
+    limit: Int
+    offset: Int
+  ): [tax_assessor!]!
+  tax_assessor_aggregate(where: tax_assessor_bool_exp): tax_assessor_aggregate!
+  tax_assessor_by_pk(tax_assessor_id: bigint!): tax_assessor
+
+  "Recorder documents (deeds, transfers, transactions)."
+  recorder(
+    where: recorder_bool_exp
+    order_by: [recorder_order_by!]
+    limit: Int
+    offset: Int
+  ): [recorder!]!
+  recorder_aggregate(where: recorder_bool_exp): recorder_aggregate!
+  recorder_by_pk(recorder_id: bigint!): recorder
+
+  "Mortgage / lien records."
+  recorder_mortgage(limit: Int, offset: Int): [recorder_mortgage!]!
+
+  "Resolved property entities."
+  property(
+    where: property_bool_exp
+    order_by: [property_order_by!]
+    limit: Int
+    offset: Int
+  ): [property!]!
+
+  "Resolved owners / entities."
+  owner(
+    where: owner_bool_exp
+    order_by: [owner_order_by!]
+    limit: Int
+    offset: Int
+  ): [owner!]!
+
+  "Parcel and building boundary geometries (PostGIS spatial filtering)."
+  parcel_boundary(
+    where: parcel_boundary_bool_exp
+    order_by: [parcel_boundary_order_by!]
+    limit: Int
+    offset: Int
+  ): [parcel_boundary!]!
+
+  "Community and demographic attributes by geography."
+  usa_demographics(limit: Int, offset: Int): [usa_demographics!]!
+
+  "Connected third-party marketplace and customer-proprietary datasets."
+  connection_dataset(
+    where: connection_dataset_bool_exp
+    limit: Int
+    offset: Int
+  ): [connection_dataset!]!
+}
+
+schema {
+  query: query_root
+}
