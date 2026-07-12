@@ -117,6 +117,12 @@ apis:
     and portfolio data, joined to the resolved knowledge graph and exposed through the
     same unified GraphQL surface for cross-dataset queries.
 common:
+- type: TrustCenter
+  url: security/cherre-trust-center.yml
+- type: DomainSecurity
+  url: security/cherre-domain-security.yml
+- type: Authentication
+  url: authentication/cherre-authentication.yml
 - type: GitHubOrganization
   url: https://github.com/cherreco
 - type: LinkedIn
@@ -131,6 +137,8 @@ common:
   url: rate-limits/cherre-rate-limits.yml
 - type: FinOps
   url: finops/cherre-finops.yml
+- url: https://blog.cherre.com/feed/
+  type: Blog
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
