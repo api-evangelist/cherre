@@ -117,6 +117,8 @@ apis:
     and portfolio data, joined to the resolved knowledge graph and exposed through the
     same unified GraphQL surface for cross-dataset queries.
 common:
+- type: AgenticAccess
+  url: agentic-access/cherre-agentic-access.yml
 - type: TrustCenter
   url: security/cherre-trust-center.yml
 - type: DomainSecurity
