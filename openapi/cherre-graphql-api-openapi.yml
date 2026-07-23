@@ -1,0 +1,105 @@
+openapi: 3.0.1
+info:
+  title: Cherre Auth GraphQL API
+  description: HTTP modeling of Cherre's single GraphQL API for connected real-estate data (property, tax assessor, recorder/deeds, mortgages/liens, owners, parcel boundaries, demographics, and connected datasets). GraphQL operations are issued as HTTP POST of a query document to the /graphql endpoint. Access is authorized with an OAuth 2.0 client-credentials bearer token obtained from the /oauth/token endpoint. This document is a representative model; the production schema is provisioned per customer via Cherre's Developer Portal.
+  termsOfService: https://cherre.com/terms-of-service/
+  contact:
+    name: Cherre
+    url: https://www.cherre.com
+  version: '1.0'
+servers:
+- url: https://api.cherre.com
+  description: Cherre API (representative)
+security:
+- bearerAuth: []
+tags:
+- name: GraphQL
+paths:
+  /graphql:
+    post:
+      operationId: postGraphQL
+      tags:
+      - GraphQL
+      summary: Execute a GraphQL query against Cherre's connected real-estate data.
+      description: Submit a GraphQL document (query plus optional variables and operation name). Cherre joins, filters, and aggregates across the connected datasets the caller is licensed for and returns a JSON response. Supply a valid bearer token in the Authorization header.
+      security:
+      - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GraphQLRequest'
+            examples:
+              taxAssessor:
+                summary: Query tax assessor records by ZIP
+                value:
+                  query: "query($zip: String!) {\n  tax_assessor(where: { situs_zip_code: { _eq: $zip } }, limit: 25) {\n    tax_assessor_id\n    assessed_value_total\n    market_value_total\n    year_built\n  }\n}"
+                  variables:
+                    zip: '10001'
+              recorderMortgages:
+                summary: Recorder deeds with mortgages
+                value:
+                  query: "query {\n  recorder(where: { fips_code: { _eq: \"06037\" } }, limit: 50) {\n    recorder_id\n    document_type\n    document_recorded_date\n    document_amount\n    mortgages { lender_name mortgage_amount }\n  }\n}"
+              spatialParcels:
+                summary: Parcels within a custom boundary (PostGIS)
+                value:
+                  query: "query($area: geometry!) {\n  parcel_boundary(where: { geom: { _st_contains: $area } }, limit: 500) {\n    cherre_parcel_id\n    tax_assessor { assessed_value_total land_use_code }\n  }\n}"
+                  variables:
+                    area: SRID=4326;POLYGON((...))
+      responses:
+        '200':
+          description: GraphQL response envelope. A 200 may still carry an `errors` array per the GraphQL specification.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GraphQLResponse'
+        '401':
+          description: Missing or invalid bearer token.
+        '429':
+          description: Too Many Requests - rate or quota limit exceeded.
+components:
+  schemas:
+    GraphQLResponse:
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties: true
+          nullable: true
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/GraphQLError'
+    GraphQLError:
+      type: object
+      properties:
+        message:
+          type: string
+        path:
+          type: array
+          items:
+            type: string
+        extensions:
+          type: object
+          additionalProperties: true
+    GraphQLRequest:
+      type: object
+      required:
+      - query
+      properties:
+        query:
+          type: string
+          description: The GraphQL query or mutation document.
+        variables:
+          type: object
+          additionalProperties: true
+          description: JSON map of GraphQL variables.
+        operationName:
+          type: string
+          description: Name of the operation to run when the document defines several.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
