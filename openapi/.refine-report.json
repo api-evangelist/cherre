@@ -1,0 +1,16 @@
+{
+  "provider": "cherre",
+  "sources": [
+    "cherre-auth-api-openapi.yml",
+    "cherre-graphql-api-openapi.yml"
+  ],
+  "outputs": [
+    "cherre-auth-api-openapi.yml",
+    "cherre-graphql-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}
