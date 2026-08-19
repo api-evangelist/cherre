@@ -1,0 +1,43 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cherre Auth GraphQL API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "GraphQL",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Execute a GraphQL query against Cherre's connected real-estate data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cherre.com/graphql",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Submit a GraphQL document (query plus optional variables and operation name). Cherre joins, filters, and aggregates across the connected datasets the caller is licensed for and returns a JSON response. Supply a valid bearer token in the Authorization header."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cherre GraphQL Auth API",
+    "version": "1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Auth",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Obtain an OAuth 2.0 client-credentials access token.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.cherre.com/oauth/token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Exchange client credentials for a short-lived bearer access token used to authorize GraphQL requests."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
