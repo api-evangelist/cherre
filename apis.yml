@@ -68,16 +68,16 @@ apis:
     url: graphql/cherre-graphql.md
   - type: Documentation
     url: https://cherre.com/marketplace-connections/
-- aid: cherre:cherre-graphql-api
-  name: Cherre GraphQL API
-  description: The GraphQL API from Cherre — 1 operation(s) for graphql.
+- aid: cherre:cherre-graph-ql-api
+  name: Cherre Graph QL API
+  description: The Graph QL API from Cherre — 1 operation(s) for graph ql.
   humanURL: https://cherre.com/products/platform/
   baseURL: https://api.cherre.com/graphql
   tags:
-  - GraphQL
+  - Graph QL
   properties:
   - type: OpenAPI
-    url: openapi/cherre-graphql-api-openapi.yml
+    url: openapi/cherre-graph-ql-api-openapi.yml
   - type: Documentation
     url: https://cherre.com/products/platform/
   - type: GraphQL
