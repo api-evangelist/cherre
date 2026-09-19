@@ -74,6 +74,8 @@ apis:
   humanURL: https://cherre.com/products/platform/
   baseURL: https://api.cherre.com/graphql
   tags:
+  - GraphQL
+  tags_raw:
   - Graph QL
   properties:
   - type: OpenAPI
