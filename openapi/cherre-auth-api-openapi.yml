@@ -1,7 +1,7 @@
-openapi: 3.0.1
+openapi: 3.2.0
 info:
   title: Cherre GraphQL Auth API
-  description: HTTP modeling of Cherre's single GraphQL API for connected real-estate data (property, tax assessor, recorder/deeds, mortgages/liens, owners, parcel boundaries, demographics, and connected datasets). GraphQL operations are issued as HTTP POST of a query document to the /graphql endpoint. Access is authorized with an OAuth 2.0 client-credentials bearer token obtained from the /oauth/token endpoint. This document is a representative model; the production schema is provisioned per customer via Cherre's Developer Portal.
+  description: HTTP modeling of Cherre's single GraphQL API for connected real-estate data (property, tax assessor, recorder/deeds, mortgages/liens, owners, parcel boundaries, demographics, and connected datasets).
   termsOfService: https://cherre.com/terms-of-service/
   contact:
     name: Cherre
@@ -20,7 +20,7 @@ paths:
       operationId: createAccessToken
       tags:
       - Auth
-      summary: Obtain an OAuth 2.0 client-credentials access token.
+      summary: Obtain an OAuth 2.0 client-credentials access token
       description: Exchange client credentials for a short-lived bearer access token used to authorize GraphQL requests.
       requestBody:
         required: true
@@ -39,17 +39,6 @@ paths:
           description: Invalid client credentials.
 components:
   schemas:
-    TokenResponse:
-      type: object
-      properties:
-        access_token:
-          type: string
-        token_type:
-          type: string
-          example: Bearer
-        expires_in:
-          type: integer
-          description: Token lifetime in seconds.
     TokenRequest:
       type: object
       required:
@@ -68,6 +57,17 @@ components:
         audience:
           type: string
           description: Optional API audience identifier.
+    TokenResponse:
+      type: object
+      properties:
+        access_token:
+          type: string
+        token_type:
+          type: string
+          example: Bearer
+        expires_in:
+          type: integer
+          description: Token lifetime in seconds.
   securitySchemes:
     bearerAuth:
       type: http
