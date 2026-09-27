@@ -35,7 +35,7 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/cherre.png
 tags:
-- Real-Estate
+- Real Estate
 - Property Intelligence
 - Data Integration
 - Knowledge Graph
@@ -46,6 +46,7 @@ tags_raw:
 - Data Integration
 - Knowledge Graph
 - GraphQL
+- Real-Estate
 created: '2026-06-21'
 modified: '2026-06-21'
 specificationVersion: '0.23'
@@ -74,8 +75,6 @@ apis:
   humanURL: https://cherre.com/products/platform/
   baseURL: https://api.cherre.com/graphql
   tags:
-  - GraphQL
-  tags_raw:
   - Graph QL
   properties:
   - type: OpenAPI
