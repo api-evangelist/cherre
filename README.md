@@ -1,4 +1,4 @@
-# Cherre (cherre)
+# Cherre
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,142 +66,125 @@
 
 Cherre is a real-estate data-integration and property-intelligence platform that connects, cleans, and resolves public, third-party, and proprietary real-estate datasets - property characteristics, tax and assessments, recorder and deeds, owners, parcel boundaries, and connected portfolio data - and serves them back through a single GraphQL API built on Hasura.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/cherre/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/cherre/refs/heads/main/apis.yml)
+**Areas:** Real Estate · Property Intelligence · Data Integration · Knowledge Graph · GraphQL
 
-## Tags
+## Cherre on APIs.io
 
-- Real Estate
-- Property Intelligence
-- Data Integration
-- Knowledge Graph
-- GraphQL
+Everything profiled for Cherre is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cherre/](https://apis.io/providers/cherre/)** — or go straight to one of the APIs or properties below.
 
-## Timestamps
+### APIs (2)
 
-- **Created:** 2026-06-21
-- **Modified:** 2026-06-21
+- [Cherre Auth API](https://apis.io/apis/cherre/cherre-auth-api/) — The Auth API from Cherre — 1 operation(s) for auth.
+- [Cherre Graph QL API](https://apis.io/apis/cherre/cherre-graph-ql-api/) — The Graph QL API from Cherre — 1 operation(s) for graph ql.
 
-## APIs
+### Published properties
 
-### Cherre Property API
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-Resolved property records - characteristics, valuations, building and unit attributes - queried over Cherre's single GraphQL API with joins, filters, aggregations, and PostGIS geospatial operations across connected datasets.
+#### GraphQL (1)
 
-- **Human URL:** [https://cherre.com/products/platform/](https://cherre.com/products/platform/)
-- **Base URL:** `https://api.cherre.com/graphql`
+GraphQL schemas.
 
-#### Tags
+- [Cherre GraphQL API](https://apis.io/graphqls/cherre/cherre-graphql/)
 
-- Property
-- Real Estate
-- GraphQL
+#### Agentic access (1)
 
-#### Properties
+Which operations an agent can call, which act, and which need a human in the loop.
 
-- [Documentation](https://cherre.com/products/platform/)
-- [GraphQL](graphql/cherre-graphql.md) — [GraphQL](https://graphql.org)
-- [OpenAPI](openapi/cherre-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cherre.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cherre.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Cherre Agentic Access](https://apis.io/agentic-access/cherre/cherre-agentic-access/)
 
-### Cherre Tax Assessor API
+#### Collections (3)
 
-County tax assessor and assessment data - assessed and market values, land and improvement valuations, exemptions, and assessment history - resolved to Cherre's standard property model and queryable via GraphQL.
+Postman and Open Collection request collections.
 
-- **Human URL:** [https://cherre.com/products/platform/](https://cherre.com/products/platform/)
-- **Base URL:** `https://api.cherre.com/graphql`
+- [Cherre GraphQL API](https://apis.io/collections/cherre/open-cherre/)
+- [Cherre GraphQL Auth API](https://apis.io/collections/cherre/open-cherre-auth-api/)
+- [Cherre Auth GraphQL API](https://apis.io/collections/cherre/open-cherre-graphql-api/)
 
-#### Tags
+#### Security (3)
 
-- Tax Assessor
-- Assessments
-- GraphQL
+Authentication, trust centre, and vulnerability disclosure.
 
-#### Properties
+- [Cherre Authentication](https://apis.io/security/cherre/cherre-authentication/)
+- [Cherre Domain Security](https://apis.io/security/cherre/cherre-domain-security/)
+- [Cherre Trust Center](https://apis.io/security/cherre/cherre-trust-center/)
 
-- [Documentation](https://cherre.com/products/platform/)
-- [GraphQL](graphql/cherre-graphql.md) — [GraphQL](https://graphql.org)
-- [OpenAPI](openapi/cherre-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cherre.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cherre.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Plans and pricing (1)
 
-### Cherre Recorder API
+Published plans, tiers and prices.
 
-Recorder, deeds, transactions, mortgages, and liens - sales and transfer history, lenders, loan amounts, and document detail - connected to parcels and owners through the Cherre knowledge graph.
+- [Cherre Plans Pricing](https://apis.io/plans/cherre/cherre-plans-pricing/)
 
-- **Human URL:** [https://cherre.com/products/platform/](https://cherre.com/products/platform/)
-- **Base URL:** `https://api.cherre.com/graphql`
+#### Rate limits (1)
 
-#### Tags
+Published request limits.
 
-- Recorder
-- Deeds
-- Mortgages
-- GraphQL
+- [Cherre Rate Limits](https://apis.io/rate-limits/cherre/cherre-rate-limits/)
 
-#### Properties
+#### FinOps (1)
 
-- [Documentation](https://cherre.com/products/platform/)
-- [GraphQL](graphql/cherre-graphql.md) — [GraphQL](https://graphql.org)
-- [OpenAPI](openapi/cherre-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cherre.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cherre.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+What the API costs to run, by operation.
 
-### Cherre Owner & Parcel API
+- [Cherre Finops](https://apis.io/finops/cherre/cherre-finops/)
 
-Resolved owners and entity relationships plus parcel and building boundary geometries, with PostGIS spatial queries (contains, intersects, point lookups) for custom market areas over the GraphQL API.
+## Where to find this API
 
-- **Human URL:** [https://cherre.com/products/platform/](https://cherre.com/products/platform/)
-- **Base URL:** `https://api.cherre.com/graphql`
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
-#### Tags
-
-- Owner
-- Parcel
-- Boundaries
-- GraphQL
-
-#### Properties
-
-- [Documentation](https://cherre.com/products/platform/)
-- [GraphQL](graphql/cherre-graphql.md) — [GraphQL](https://graphql.org)
-- [OpenAPI](openapi/cherre-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cherre.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cherre.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-### Cherre Connections API
-
-Connected third-party marketplace datasets and a customer's own proprietary and portfolio data, joined to the resolved knowledge graph and exposed through the same unified GraphQL surface for cross-dataset queries.
-
-- **Human URL:** [https://cherre.com/marketplace-connections/](https://cherre.com/marketplace-connections/)
-- **Base URL:** `https://api.cherre.com/graphql`
-
-#### Tags
-
-- Connections
-- Marketplace
-- Proprietary Data
-- GraphQL
-
-#### Properties
-
-- [Documentation](https://cherre.com/marketplace-connections/)
-- [GraphQL](graphql/cherre-graphql.md) — [GraphQL](https://graphql.org)
-- [OpenAPI](openapi/cherre-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/cherre.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/cherre.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
-
-- [GitHub Organization](https://github.com/cherreco)
-- [LinkedIn](https://www.linkedin.com/company/cherre)
 - [Website](https://www.cherre.com)
 - [Documentation](https://cherre.com/products/platform/)
-- [Plans](plans/cherre-plans-pricing.yml)
-- [Rate Limits](rate-limits/cherre-rate-limits.yml)
-- [Fin Ops](finops/cherre-finops.yml)
+- [Blog](https://blog.cherre.com/feed/)
+- [GitHub](https://github.com/cherreco)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 28.4** — thin · rubric 0.24.0 · scored 2026-10-17
+
+| Facet | Score |
+|---|---|
+| Discoverability | 66.1 |
+| Contract quality | 51.9 |
+| Contract governance | 0.0 |
+| Operational transparency | 10.5 |
+| Developer ergonomics | 23.8 |
+| Access clarity | 15.8 |
+
+**Agent readiness 22.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | — |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+
+**Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/cherre/](https://apis.io/providers/cherre/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Cherre: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/cherre/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
